@@ -6,6 +6,43 @@
 enum ShipCollState { VUL, INVUL };
 enum GameStatus { PLAYING, WIN, LOSE };
 enum Direction  { STAND, UP, DOWN, LEFT, RIGHT };
+enum Reverse { REVERSE_T, REVERSE_B, REVERSE_L, REVERSE_R };
+
+class ScreenBounds 
+{
+public:
+	ScreenBounds(int top, int bottom, int left, int right) :
+		topBound(top), bottomBound(bottom), leftBound(left), rightBound(right)
+	{
+	}
+	~ScreenBounds()
+	{
+	}
+
+	int getTop() const
+	{
+		return topBound;
+	}
+
+	int getBottom() const
+	{
+		return bottomBound;
+	}
+
+	int getLeft() const
+	{
+		return leftBound;
+	}
+
+	int getRight() const
+	{
+		return rightBound;
+	}
+
+private:
+	int topBound, bottomBound, leftBound, rightBound;
+
+};
 
 class GameChar
 {
@@ -152,9 +189,10 @@ class Bullet : public GameChar
 {
 public: 
 
-	Bullet(float x, float y, ALLEGRO_BITMAP* bullet) : GameChar(x, y)
+	Bullet(float x, float y, ALLEGRO_BITMAP* bullet, float hp) : GameChar(x, y)
 	{
 		this->pic = bullet;
+		this->hp = hp;
 		this->ms = 3;
 	}
 
@@ -242,9 +280,9 @@ public:
 		collStateDur = 0; // 0 is equal to 'it stays like that'
 	}
 
-	void fire( std::vector<Bullet>& bulletCont, ALLEGRO_BITMAP* bullet )
+	void fire( std::vector<Bullet>& bulletCont, ALLEGRO_BITMAP* bullet, float hp = 1.0)
 	{
-		bulletCont.push_back(Bullet(getXWidth(), (getYHeight() + y) / 2, bullet));
+		bulletCont.push_back(Bullet(getXWidth(), (getYHeight() + y) / 2, bullet, hp));
 	}
 
 	void decHp()
@@ -293,6 +331,25 @@ public:
 
 	}
 
+	void reverseMove(Reverse r)
+	{
+		switch(r)
+		{
+		case REVERSE_L:
+			x += ms;
+			break;
+		case REVERSE_R:
+			x += -ms;
+			break;
+		case REVERSE_T:
+			y += ms;
+			break;
+		case REVERSE_B:
+			y += -ms;
+			break;
+		}
+	}
+
 	void decInvulTimer()
 	{
 		if( collStateDur > 0 )
@@ -329,6 +386,7 @@ private:
 	ShipCollState collState;
 	int collStateDur;
 };
+
 
 #endif
 

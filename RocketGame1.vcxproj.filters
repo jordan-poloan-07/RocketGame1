@@ -18,7 +18,10 @@
     <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="m_coords.cpp">
+    <ClCompile Include="coordinates.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="bounds.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -8,20 +8,7 @@
 const int screenX = 640;
 const int screenY = 480;
 
-const int topBound = screenY * 0.10;
-const int bottomBound = screenY * 0.90;
-
-const int leftBound = screenX * 0.10;
-const int rightBound = screenX * 0.90;
-
-bool isInMovableScreen(const Ship& ship)
-{
-	if( ship.getX() > leftBound && ship.getY() > topBound && ship.getYHeight() < bottomBound && ship.getXWidth() < rightBound )
-		return true;
-
-	return false;
-}
-
+extern void isInScreenBounds(Ship& ship, const ScreenBounds& screen);
 extern void populateCoordinates(const char* filename, int permBatchIncrement, vector<vector<int> >& meteorCoords);
 
 int main(int argc , char** argv)
@@ -56,6 +43,7 @@ int main(int argc , char** argv)
 	bool startComplete = false, gameComplete = false, exitComplete = false;
 	bool draw = false;
 	GameStatus gameStatus = PLAYING;
+	const ScreenBounds screenBounds(screenY * 0.10, screenY * 0.90, screenX * 0.10, screenX * 0.90);
 
 	shipBmp = al_load_bitmap("space/ship.tga");
 	backg = al_load_bitmap("space/background.tga");
@@ -191,7 +179,7 @@ int main(int argc , char** argv)
 				ship.fire(bullets, small_bullet);
 				break;
 			case ALLEGRO_KEY_F:
-				ship.fire(bullets, large_bullet);
+				ship.fire(bullets, large_bullet, 3.0);
 				break;
 			}
 		}
@@ -230,6 +218,7 @@ int main(int argc , char** argv)
 			{
 				// move everything past here
 				// move the ship!!
+				
 				ship.move();
 				ship.decInvulTimer(); // this will decrease invulnerability if it is
 
@@ -279,14 +268,14 @@ int main(int argc , char** argv)
 				// disactivate bullets that go through right bound or have collided,active = false
 				for(unsigned int i = 0; i < bullets.size(); i++)
 				{
-					if( bullets[i].getX() > rightBound )
+					if( bullets[i].getX() > screenBounds.getRight())
 						bullets[i].setActive(false);
 				}
 
 				// disactivate meteors that go through left bound
 				for(unsigned int i = 0; i < meteors.size(); i++)
 				{
-					if( ( meteors[i].getX() + al_get_bitmap_width(meteors[i].getBmp()) ) < leftBound )
+					if( ( meteors[i].getX() + al_get_bitmap_width(meteors[i].getBmp()) ) < screenBounds.getLeft())
 						meteors[i].setActive(false);
 				}
 
@@ -300,6 +289,7 @@ int main(int argc , char** argv)
 				meteors.erase(iNewMeteorIter, meteors.end());
 
 				ship.updatePosition();
+				isInScreenBounds(ship, screenBounds);
 
 				for(unsigned int i = 0; i < bullets.size(); i++)
 				{
