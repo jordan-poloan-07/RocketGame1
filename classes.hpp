@@ -6,7 +6,6 @@
 enum ShipCollState { VUL, INVUL };
 enum GameStatus { PLAYING, WIN, LOSE };
 enum Direction  { STAND, UP, DOWN, LEFT, RIGHT };
-enum Reverse { REVERSE_T, REVERSE_B, REVERSE_L, REVERSE_R };
 
 class ScreenBounds 
 {
@@ -331,22 +330,23 @@ public:
 
 	}
 
-	void reverseMove(Reverse r)
+	void isInScreenBounds(ScreenBounds screen)
 	{
-		switch(r)
+		if( getX() < screen.getLeft() )
 		{
-		case REVERSE_L:
 			x += ms;
-			break;
-		case REVERSE_R:
+		}
+		else if( getXWidth() > screen.getRight() )
+		{
 			x += -ms;
-			break;
-		case REVERSE_T:
+		}
+		else if( getY() < screen.getTop() )
+		{
 			y += ms;
-			break;
-		case REVERSE_B:
+		}
+		else if( getYHeight() > screen.getBottom() )
+		{
 			y += -ms;
-			break;
 		}
 	}
 

@@ -73,7 +73,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="bounds.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="coordinates.cpp" />
   </ItemGroup>

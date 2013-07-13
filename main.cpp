@@ -8,7 +8,6 @@
 const int screenX = 640;
 const int screenY = 480;
 
-extern void isInScreenBounds(Ship& ship, const ScreenBounds& screen);
 extern void populateCoordinates(const char* filename, int permBatchIncrement, vector<vector<int> >& meteorCoords);
 
 int main(int argc , char** argv)
@@ -289,7 +288,7 @@ int main(int argc , char** argv)
 				meteors.erase(iNewMeteorIter, meteors.end());
 
 				ship.updatePosition();
-				isInScreenBounds(ship, screenBounds);
+				ship.isInScreenBounds(screenBounds);
 
 				for(unsigned int i = 0; i < bullets.size(); i++)
 				{
